@@ -4,7 +4,7 @@ It all starts with binstall.exe. I go ahead and execute the installer, catching 
 
 Most importantly, a dll is dumped and AppInit_DLLs registry key is added to point to that dll (written to ```%APPDATA%\Microsoft\Internet Explorer\browserassist.dll```). This is familiar to me, as I've written about this injection technique in the past. To sum it up, every user mode process on the system that makes use of User32.dll will have AppInit_DLLs loaded into its address space. I open cmd and attach to it with Olly. Not surprisingly, I find browserassist.dll loaded in there.
 
-[01.png]
+![injected DLL](https://github.com/pr0li/flareon5/blob/master/img/01.png)
 
 Now I'm quite sure I need to open Firefox and have that dll injected into it, as this browser is mentioned in the instructions for the challenge. In order to catch execution of that dll before it even gets to Firefox's entry point, I set up Olly like this:
 
@@ -19,7 +19,7 @@ I continue debugging and confirm my hypothesis but then I find some calls to che
 
 There seem to be some decryption and Internet routines ahead. I also see GetModuleFilename again in there, so it might be used as the decryption key or something. I don't really check, I just keep going until I have to stop. So, a URL is decrypted (http://pastebin.com/raw/hvaru8NU) and some encrypted text is pulled from there. That text is decrypted and we get something really pretty :)
 
-[02.png]
+![decrypted text](https://github.com/pr0li/flareon5/blob/master/img/02.png)
 
 It is TinyNuke's configuration for webinjects (https://github.com/rossja/TinyNuke/blob/master/panel/private/injects.json). That decrypted configuration is big and I get lost in between js code at first (see file config.json). So I decide to just go see those injections in action. I use a json beautifier and see that the most important fields at this point are those that tell us which sites and files will be injected:
 
@@ -38,9 +38,9 @@ If I continue debugging, there's not much to mention, except that nss3.dll, nspr
 
 So I hit F9 and find out that killing that main thread was not going to be flawless. Anyway, I don't need Olly anymore, so I permanently patch the dll. To be able to modify the file, I set the registry key LoadAppInit_DLLs to zero. Then I close everything I had open. I proceed to change "cmp eax, 1" to "cmp eax, 0". In other words, change 83 F8 01 to 83 F8 00.
 
-[03.png]
+![firefox version check](https://github.com/pr0li/flareon5/blob/master/img/03.png)
 
-[04.png]
+![patching comparison](https://github.com/pr0li/flareon5/blob/master/img/04.png)
 
 After changing that registry key back to 1, I visit flare-on.com and use Firefox's debugger to see that the code has actually been injected in model, view and controller. Now there is a new command "su" that asks for a password. The function cp() has been added to controller.js to check for a valid password. After some necessary beautifying, here's the portion of cp() that checks for a valid password:
 
@@ -120,6 +120,6 @@ Just make that comparison an assignment and you got yourself the secret director
 
 Finally I execute 'cd key' to get the flag:
 
-[05.png]
+![challenge solved](https://github.com/pr0li/flareon5/blob/master/img/05.png)
 
 Cool challenge!
