@@ -21,7 +21,7 @@ There seem to be some decryption and Internet routines ahead. I also see GetModu
 
 ![decrypted text](https://github.com/pr0li/flareon5/blob/master/img/02.png)
 
-It is TinyNuke's configuration for webinjects (https://github.com/rossja/TinyNuke/blob/master/panel/private/injects.json). That decrypted configuration is big and I get lost in between js code at first (see file config.json). So I decide to just go see those injections in action. I use a json beautifier and see that the most important fields at this point are those that tell us which sites and files will be injected:
+It is TinyNuke's configuration for webinjects (https://github.com/rossja/TinyNuke/blob/master/panel/private/injects.json). That decrypted configuration is big and I get lost in between js code at first (see file ```config.json```). So I decide to just go see those injections in action. I use a json beautifier and see that the most important fields at this point are those that tell us which sites and files will be injected:
 
 ```
 "path": "/js/controller.js",
