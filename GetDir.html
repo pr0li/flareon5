@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <button onclick="myFunction()">Click Me!</button>
+
+    <p id="demo"></p>
+
+    <script>
+        function myFunction() {
+            var dir = (function() {
+                var Q = Array.prototype.slice.call(arguments),
+                    f = Q.shift();
+                return Q.reverse().map(function(M, m) {
+                    return String.fromCharCode(M - f - 50 - m)
+                }).join('')
+            })(57, 214) + (14).toString(36).toLowerCase() + (function() {
+                var B = Array.prototype.slice.call(arguments),
+                    N = B.shift();
+                return B.reverse().map(function(q, J) {
+                    return String.fromCharCode(q - N - 36 - J)
+                }).join('')
+            })(59, 216)
+
+            document.getElementById("demo").innerHTML = dir;
+        }
+    </script>
+
+</body>
+
+</html>
